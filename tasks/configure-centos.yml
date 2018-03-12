@@ -1,0 +1,18 @@
+---
+# python-psutil is too old on CentOS 7 (2.2.1)
+# Ansible dconf module requires at least version 4.0.0
+# To pip install psutil we need gcc and python-devel
+- name: install required dependencies
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - dconf
+    - python-setuptools
+    - gcc
+    - python-devel
+
+- name: install pip
+  easy_install:
+    name: pip
+    state: present

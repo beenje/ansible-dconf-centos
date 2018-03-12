@@ -1,0 +1,22 @@
+---
+- name: install CentOS dependencies
+  import_tasks: configure-centos.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: install Debian dependencies
+  import_tasks: configure-debian.yml
+  when: ansible_os_family == 'Debian'
+
+# psutil >= 4.0.0 is required by the dconf module
+- name: install a recent version of psutil
+  pip:
+    name: psutil
+    state: present
+
+- name: change cursor size in system settings
+  dconf:
+    key: "/org/gnome/desktop/interface/cursor-size"
+    value: "48"
+    state: present
+  become: true
+  become_user: vagrant
